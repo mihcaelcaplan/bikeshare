@@ -8,14 +8,18 @@ import {
   StatusBar,
   Platform,
   TouchableHighlight,
+  ListView,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+
+// some global vars
+var REQUEST_URL = 'https://raw.githubusercontent.com/mihcaelcaplan/bikeshare/master/data.json'
 
 class ListScreen extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      list: null,
+      bikes: null,
     };
   }
 
@@ -27,16 +31,39 @@ class ListScreen extends React.Component {
     this.fetchData();
   }
 
-  fetchData(){}
+  fetchData(){
+    fetch(REQUEST_URL)
+     .then((response) => response.json())
+     .then((responseData) => {
+       this.setState({
+         bikes: responseData.bikes,
+       });
+     })
+     .done();
+  }
 
+  // rendering code for ListScreen
   render() {
-    const { navigate } = this.props.navigation;
+    if(!this.state.bikes){
+      return this.loadingView();
+    }
+
+    var bike = this.state.bikes[0]
     return (
-      <View>
-        <TouchableHighlight style={styles.listingItem} onPress={()=> navigate('BikeDetails')}>
+      this.renderListing(bike)
+    );
+  }
+
+    // defines views to display above
+  loadingView(){
+    return <Text>Shits loading</Text>
+    }
+  renderListing(){
+    const { navigate } = this.props.navigation;
+    return(
+      <TouchableHighlight style={styles.container} onPress={()=> navigate('BikeDetails')}>
         <Text style = {styles.listingText}>This is a bike</Text>
-        </TouchableHighlight>
-      </View>
+      </TouchableHighlight>
     );
   }
 }
@@ -54,6 +81,7 @@ class DetailScreen extends React.Component {
   }
 }
 
+
 const SimpleApp = StackNavigator({
   BikeList: { screen: ListScreen },
   BikeDetails: {screen: DetailScreen}
@@ -66,6 +94,10 @@ const SimpleApp = StackNavigator({
   });
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    flex: 1,
+  },
   listingItem: {
     // flex: 1,
     backgroundColor: '#8c95a3',
