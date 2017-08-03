@@ -22,7 +22,13 @@ class ListScreen extends React.Component {
   static navigationOptions = {
     title: 'List of Bikes',
   };
-  
+
+  componentDidMount(){
+    this.fetchData();
+  }
+
+  fetchData(){}
+
   render() {
     const { navigate } = this.props.navigation;
     return (
