@@ -18,9 +18,12 @@ var REQUEST_URL = 'https://raw.githubusercontent.com/mihcaelcaplan/bikeshare/mas
 class ListScreen extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      bikes: null,
-    };
+   this.state = {
+     dataSource: new ListView.DataSource({
+       rowHasChanged: (row1, row2) => row1 !== row2,
+     }),
+     loaded: false,
+   };
   }
 
   static navigationOptions = {
@@ -36,7 +39,8 @@ class ListScreen extends React.Component {
      .then((response) => response.json())
      .then((responseData) => {
        this.setState({
-         bikes: responseData.bikes,
+         dataSource: this.state.dataSource.cloneWithRows(responseData.bikes),
+         loaded: true,
        });
      })
      .done();
@@ -44,25 +48,33 @@ class ListScreen extends React.Component {
 
   // rendering code for ListScreen
   render() {
-    if(!this.state.bikes){
+    if(!this.state.loaded){
       return this.loadingView();
     }
 
-    var bike = this.state.bikes[0]
     return (
-      this.renderListing(bike)
-    );
+      <ListView
+       dataSource={this.state.dataSource}
+       renderRow={this.renderListing}
+       style={styles.listView}
+     />
+   );
   }
 
     // defines views to display above
   loadingView(){
     return <Text>Shits loading</Text>
     }
-  renderListing(){
-    const { navigate } = this.props.navigation;
+  renderListing(bike){
+    // const { navigate } = this.props.navigation.navigate;
     return(
-      <TouchableHighlight style={styles.container} onPress={()=> navigate('BikeDetails')}>
-        <Text style = {styles.listingText}>This is a bike</Text>
+      <TouchableHighlight style={styles.listingItem} onPress={()=> navigate('BikeDetails')}>
+        <View style={styles.container}>
+          <Text style = {styles.listingText}>{bike.owner}</Text>
+          <Text style = {styles.listingText}>{bike.timeStart.slice(9,11)+":"+bike.timeStart.slice(11,13)}</Text>
+          <Text style = {styles.listingText}>{bike.timeEnd.slice(9,11)+":"+bike.timeEnd.slice(11,13)}</Text>
+
+        </View>
       </TouchableHighlight>
     );
   }
@@ -96,7 +108,7 @@ const SimpleApp = StackNavigator({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    flex: 1,
+    justifyContent: 'space-around',
   },
   listingItem: {
     // flex: 1,
@@ -104,8 +116,12 @@ const styles = StyleSheet.create({
     // height: 50
   },
   listingText: {
-    fontSize: 26
+    fontSize: 24,
   },
+  listView: {
+   paddingTop: 20,
+   backgroundColor: '#F5FCFF',
+ },
 
 });
 
