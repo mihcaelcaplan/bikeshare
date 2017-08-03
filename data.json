@@ -3,26 +3,26 @@
     "bike1":{
       "id":"1",
       "owner":"Jessie Chapman",
-      "time-start":"20170803_1230",
-      "time-end":"20170803_1900"
+      "timeStart":"20170803_1230",
+      "timeEnd":"20170803_1900"
     },
     "bike2":{
       "id":"2",
       "owner":"Jim Chapman",
-      "time-start":"20170804_1230",
-      "time-end":"20170805_1900"
+      "timeStart":"20170804_1230",
+      "timeEnd":"20170805_1900"
     },
     "bike1":{
       "id":"3",
       "owner":"Fucker Timothyson",
-      "time-start":"20170805_0130",
-      "time-end":"20170803_1830"
+      "timeStart":"20170805_0130",
+      "timeEnd":"20170803_1830"
     },
     "bike1":{
       "id":"4",
       "owner":"MIl Watts",
-      "time-start":"20170903_1200",
-      "time-end":"20170803_2115"
+      "timeStart":"20170903_1200",
+      "timeEnd":"20170803_2115"
     }
   }
 }
